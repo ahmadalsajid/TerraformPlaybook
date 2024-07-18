@@ -5,8 +5,16 @@ terraform {
       version = "~> 5.0"
     }
   }
-}
 
+  backend "s3" {
+    bucket = "sajid-terraform-up-and-running-state"
+    key    = "global/s3/terraform.tfstate"
+    region = "us-east-2"
+
+    dynamodb_table = "terraform-up-and-running-lock"
+    encrypt        = true
+  }
+}
 provider "aws" {
   region = "us-east-2"
 }
@@ -36,16 +44,16 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "default" {
 }
 
 resource "aws_s3_bucket_public_access_block" "public_access" {
-  bucket = aws_s3_bucket.terraform_state.id
-  block_public_acls = true
-  block_public_policy = true
-  ignore_public_acls = true
+  bucket                  = aws_s3_bucket.terraform_state.id
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
   restrict_public_buckets = true
 }
 
 resource "aws_dynamodb_table" "terraform_locks" {
-  hash_key = "LockID"
-  name     = "terraform-up-and-running-lock"
+  hash_key     = "LockID"
+  name         = "terraform-up-and-running-lock"
   billing_mode = "PAY_PER_REQUEST"
 
   attribute {
