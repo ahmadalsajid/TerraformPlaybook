@@ -38,22 +38,7 @@ terraform init
 terraform apply
 ```
 
-List all the workspaces
-
-```
-$ terraform workspace list
-default
-example1
-```
-
-Switch between them at any time using the `terraform workspace select` command:
-
-```
-$ terraform workspace select example1
-Switched to workspace "example1".
-```
-
-Clean up when you're done, switch to each workspace and do:
+Clean up when you're done:
 
 ```
 terraform destroy

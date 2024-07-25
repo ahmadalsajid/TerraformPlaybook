@@ -10,7 +10,7 @@ terraform {
 
   backend "s3" {
     bucket         = "sajid-terraform-up-and-running-state"
-    key            = "stage/data-stores/mysql/terraform.tfstate"
+    key            = "prod/data-stores/mysql/terraform.tfstate"
     region         = "us-east-2"
     dynamodb_table = "terraform-up-and-running-lock"
     encrypt        = true
