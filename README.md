@@ -22,9 +22,11 @@ terraform apply
 
 After that, go to 
 [stage/services/webserver-cluster](stage/services/webserver-cluster/) 
-and again do
+and, run `terraform get` to get the remote versioned modules locally 
+and the rest are same.
 
 ```
+terraform get
 terraform init
 terraform apply
 ```
