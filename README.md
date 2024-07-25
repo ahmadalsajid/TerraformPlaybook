@@ -12,33 +12,25 @@ export AWS_DEFAULT_PROFILE="YOUR_CONFIGURED_AWS_PROFILE"
 
 Deploy the code:
 
-```
-terraform init
-terraform apply
-```
-
-Check the workspace
-
-```
-$ terraform workspace show
-default
-```
-
-Create new workspace
-
-```
-$ terraform workspace new example1
-Created and switched to workspace "example1"!
-```
-
-Again, deploy the code for new workspace:
+First, we want to deploy the staging database. So, go to 
+[stage/mysql](stage/data-stores/mysql/) and do
 
 ```
 terraform init
 terraform apply
 ```
 
-Clean up when you're done:
+After that, go to 
+[stage/services/webserver-cluster](stage/services/webserver-cluster/) 
+and again do
+
+```
+terraform init
+terraform apply
+```
+
+Clean up when you're done, from each module, i.e. `stage/services/webserver-cluster`, 
+`stage/mysql`:
 
 ```
 terraform destroy
