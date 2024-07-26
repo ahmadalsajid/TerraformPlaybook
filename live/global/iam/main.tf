@@ -7,20 +7,22 @@ terraform {
       version = "~> 5.0"
     }
   }
-# backend "s3" {
-#     bucket         = "sajid-terraform-up-and-running-state"
-#     key            = "global/iam/terraform.tfstate"
-#     region         = "us-east-2"
-#     dynamodb_table = "terraform-up-and-running-lock"
-#     encrypt        = true
-#   }
+  # backend "s3" {
+  #     bucket         = "sajid-terraform-up-and-running-state"
+  #     key            = "global/iam/terraform.tfstate"
+  #     region         = "us-east-2"
+  #     dynamodb_table = "terraform-up-and-running-lock"
+  #     encrypt        = true
+  #   }
 }
 
 provider "aws" {
   region = "us-east-2"
 }
 
-resource "aws_iam_user" "example" {
-  count = length(var.user_names)
-  name  = var.user_names[count.index]
+module "users" {
+  source = "../../../modules/landing-zone/iam-user"
+
+  count     = length(var.user_names)
+  user_name = var.user_names[count.index]
 }
