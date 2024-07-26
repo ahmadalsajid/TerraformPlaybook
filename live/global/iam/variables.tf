@@ -17,4 +17,5 @@ variable "hero_thousand_faces" {
 variable "give_neo_full_access" {
   description = "if true, neo gets full access to cloudwatch"
   type        = bool
+  default     = false
 }
