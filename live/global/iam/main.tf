@@ -7,6 +7,13 @@ terraform {
       version = "~> 5.0"
     }
   }
+# backend "s3" {
+#     bucket         = "sajid-terraform-up-and-running-state"
+#     key            = "global/iam/terraform.tfstate"
+#     region         = "us-east-2"
+#     dynamodb_table = "terraform-up-and-running-lock"
+#     encrypt        = true
+#   }
 }
 
 provider "aws" {
@@ -14,6 +21,6 @@ provider "aws" {
 }
 
 resource "aws_iam_user" "example" {
-  count = 3
-  name = "admin.${count.index}"
+  count = length(var.user_names)
+  name  = var.user_names[count.index]
 }
