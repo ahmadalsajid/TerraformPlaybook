@@ -8,11 +8,11 @@ terraform {
     }
   }
   backend "s3" {
-    bucket = "terraform-up-and-running-state"
-    key = "stage/services/webserver-cluster/terraform.tfstate"
-    region = "us-east-2"
-    dynamodb_table ="terraform-up-and-running-locks"
-    encrypt = true
+    bucket         = "terraform-up-and-running-state"
+    key            = "stage/services/webserver-cluster/terraform.tfstate"
+    region         = "us-east-2"
+    dynamodb_table = "terraform-up-and-running-locks"
+    encrypt        = true
   }
 }
 
@@ -30,6 +30,8 @@ module "webserver_cluster" {
   instance_type = "t2.micro"
   min_size      = 1
   max_size      = 3
+
+  enable_autoscaling = false
 }
 
 resource "aws_security_group_rule" "allow_testing_inbound" {
@@ -38,6 +40,6 @@ resource "aws_security_group_rule" "allow_testing_inbound" {
   security_group_id = module.webserver_cluster.alb_security_group_id
   to_port           = 12121
   type              = "ingress"
-  cidr_blocks = ["0.0.0.0/0"]
+  cidr_blocks       = ["0.0.0.0/0"]
 }
 

@@ -36,26 +36,5 @@ module "webserver_cluster" {
     Owner     = "sajid"
     ManagedBy = "terraform"
   }
-}
-
-
-resource "aws_autoscaling_schedule" "scale_out_during_business_hours" {
-  autoscaling_group_name = module.webserver_cluster.asg_name
-
-  scheduled_action_name = "scale_out_during_business_hours"
-  min_size              = 1
-  max_size              = 3
-  desired_capacity      = 1
-  recurrence            = "0 9 * * *"
-}
-
-
-resource "aws_autoscaling_schedule" "scale_in_at_night" {
-  autoscaling_group_name = module.webserver_cluster.asg_name
-
-  scheduled_action_name = "scale_in_at_night"
-  min_size              = 1
-  max_size              = 3
-  desired_capacity      = 1
-  recurrence            = "0 17 * * *"
+  enable_autoscaling = true
 }
