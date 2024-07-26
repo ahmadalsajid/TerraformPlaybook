@@ -31,6 +31,8 @@ module "webserver_cluster" {
   min_size      = 1
   max_size      = 3
 
+  server_text   = "Prod cluster instance"
+
   enable_autoscaling = false
 }
 

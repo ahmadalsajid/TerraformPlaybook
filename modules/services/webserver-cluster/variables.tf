@@ -42,5 +42,17 @@ variable "custom_tags" {
 
 variable "enable_autoscaling" {
   description = "if set to true, enable autoscaling"
-  type = bool
+  type        = bool
+}
+
+variable "ami" {
+  description = "the AMI to use in EC2"
+  type        = string
+  default     = "ami-0862be96e41dcbf74"
+}
+
+variable "server_text" {
+  description = "text to display in web server"
+  type        = string
+  default     = "Hello, World"
 }

@@ -32,6 +32,8 @@ module "webserver_cluster" {
   min_size      = 1
   max_size      = 3
 
+  server_text = "Prod cluster instance"
+
   custom_tags = {
     Owner     = "sajid"
     ManagedBy = "terraform"

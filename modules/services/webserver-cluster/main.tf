@@ -75,13 +75,13 @@ resource "aws_security_group_rule" "allow_all_outbound" {
 }
 
 resource "aws_launch_configuration" "example" {
-  image_id        = "ami-0862be96e41dcbf74"
+  image_id        = var.ami
   instance_type   = var.instance_type
   security_groups = [aws_security_group.instance.id]
 
   user_data = <<-EOF
               #!/bin/bash
-              echo "${data.terraform_remote_state.db.outputs.address}:${data.terraform_remote_state.db.outputs.port} " > index.html
+              echo "${var.server_text} :: ${data.terraform_remote_state.db.outputs.address}:${data.terraform_remote_state.db.outputs.port} " > index.html
               nohup busybox httpd -f -p ${var.server_port} &
               EOF
 
@@ -98,7 +98,7 @@ resource "aws_launch_configuration" "example" {
 }
 
 resource "aws_autoscaling_group" "example" {
-  launch_configuration = aws_launch_configuration.example.name
+  launch_configuration = "${var.cluster_name}-${aws_launch_configuration.example.name}"
   vpc_zone_identifier  = data.aws_subnets.default.ids
 
   target_group_arns = [aws_lb_target_group.asg.arn]
@@ -107,10 +107,16 @@ resource "aws_autoscaling_group" "example" {
   max_size = var.max_size
   min_size = var.min_size
 
+  min_elb_capacity = 1
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
   tag {
     key                 = "Name"
-    propagate_at_launch = true
     value               = var.cluster_name
+    propagate_at_launch = true
   }
 
   dynamic "tag" {
@@ -182,14 +188,14 @@ resource "aws_lb_listener_rule" "asg" {
 
 
 resource "aws_autoscaling_schedule" "scale_out_during_business_hours" {
-  count = var.enable_autoscaling ? 1 : 0
-  scheduled_action_name = "${var.cluster_name}-scale-out-during-business_hours"
+  count                  = var.enable_autoscaling ? 1 : 0
+  scheduled_action_name  = "${var.cluster_name}-scale-out-during-business_hours"
   autoscaling_group_name = aws_autoscaling_group.example.name
 
-  min_size              = 1
-  max_size              = 3
-  desired_capacity      = 1
-  recurrence            = "0 9 * * *"
+  min_size         = 1
+  max_size         = 3
+  desired_capacity = 1
+  recurrence       = "0 9 * * *"
 }
 
 
