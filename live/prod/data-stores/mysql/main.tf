@@ -19,16 +19,33 @@ terraform {
 
 provider "aws" {
   region = "us-east-2"
+  alias  = "primary"
 }
 
-resource "aws_db_instance" "example" {
-  identifier_prefix   = "terraform-up-and-running"
-  engine              = "mysql"
-  allocated_storage   = 10
-  instance_class      = "db.t3.micro"
-  skip_final_snapshot = true
+provider "aws" {
+  region = "us-west-1"
+  alias  = "replica"
+}
 
-  db_name  = var.db_name
-  username = var.db_username
-  password = var.db_password
+module "mysql_primary" {
+  source = "../../../../modules/data-stores/mysql"
+
+  providers = {
+    aws = aws.primary
+  }
+
+  db_name                 = var.db_name
+  db_username             = var.db_username
+  db_password             = var.db_password
+  backup_retention_period = 1
+}
+
+module "mysql_replica" {
+  source = "../../../../modules/data-stores/mysql"
+
+  providers = {
+    aws = aws.replica
+  }
+  # make this a replica of the primary
+  replicate_source_db = module.mysql_primary.arn
 }
