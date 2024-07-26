@@ -81,10 +81,9 @@ resource "aws_launch_configuration" "example" {
 
   user_data = <<-EOF
               #!/bin/bash
-              echo "Hello world" > index.html
+              echo "${data.terraform_remote_state.db.outputs.address}:${data.terraform_remote_state.db.outputs.port} " > index.html
               nohup busybox httpd -f -p ${var.server_port} &
               EOF
-              # echo "${data.terraform_remote_state.db.outputs.address}:${data.terraform_remote_state.db.outputs.port} " > index.html
 
   # Templatefile not working with this version of Terraform/AWS
   #   user_data = templatefile("user-data.sh", {
