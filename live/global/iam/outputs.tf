@@ -1,9 +1,7 @@
-output "user_arns" {
-  value       = module.users[*].user_arn
-  description = "All IAM users ARN"
+output "upper_names" {
+  value = [for name in var.user_names : upper(name)]
 }
 
-output "all_arns" {
-  value       = values(module.users)[*].user_arn
-  description = "All IAM users ARN"
+output "upper_names_with_condition" {
+  value = [for name in var.user_names : upper(name) if length(name) < 6]
 }
