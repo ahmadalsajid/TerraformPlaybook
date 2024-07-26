@@ -1,7 +1,7 @@
 variable "user_names" {
   description = "Create users with these usernames"
   type        = list(string)
-  default     = ["ahmad", "sajid", "tasmiah"]
+  default     = ["neo", "trinity", "morpheus"]
 }
 
 variable "hero_thousand_faces" {
@@ -12,4 +12,9 @@ variable "hero_thousand_faces" {
     trinity  = "love interest"
     morpheus = "mentor"
   }
+}
+
+variable "give_neo_full_access" {
+  description = "if true, neo gets full access to cloudwatch"
+  type        = bool
 }
