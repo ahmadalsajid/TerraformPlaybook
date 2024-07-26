@@ -1,9 +1,9 @@
 output "user_arns" {
-  value       = aws_iam_user.example
+  value       = module.users[*].user_arn
   description = "All IAM users ARN"
 }
 
 output "all_arns" {
-  value       = values(aws_iam_user.example)[*].arn
+  value       = values(module.users)[*].user_arn
   description = "All IAM users ARN"
 }

@@ -33,3 +33,9 @@ variable "max_size" {
   description = "maximum number of Ec2"
   type        = number
 }
+
+variable "custom_tags" {
+  description = "Custom tags to set on ASG"
+  type        = map(string)
+  default     = {}
+}
