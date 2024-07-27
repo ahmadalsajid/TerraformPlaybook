@@ -1,14 +1,9 @@
-output "primary_address" {
-  value       = module.mysql_primary.address
-  description = "Primary DB"
+output "address" {
+  value       = module.mysql.address
+  description = "Connect to the database at this endpoint"
 }
 
-output "primary_port" {
-  value       = module.mysql_primary.port
-  description = "Primary DB port"
-}
-
-output "primary_arn" {
-  value       = module.mysql_primary.arn
-  description = "Primary DB ARN"
+output "port" {
+  value       = module.mysql.port
+  description = "The port the database is listening on"
 }
