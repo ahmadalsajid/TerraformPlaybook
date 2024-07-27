@@ -6,7 +6,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 4.0"
+      version = "~> 5.0"
     }
   }
 }
@@ -18,12 +18,11 @@ module "asg" {
   ami           = var.ami
   instance_type = var.instance_type
 
-  user_data     = templatefile("${path.module}/user-data.sh", {
-    server_port = var.server_port
-    db_address  = data.terraform_remote_state.db.outputs.address
-    db_port     = data.terraform_remote_state.db.outputs.port
-    server_text = var.server_text
-  })
+  user_data = <<-EOF
+              #!/bin/bash
+              echo "${var.server_text} " > index.html
+              nohup busybox httpd -f -p ${var.server_port} &
+              EOF
 
   min_size           = var.min_size
   max_size           = var.max_size
@@ -73,16 +72,6 @@ resource "aws_lb_listener_rule" "asg" {
   action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.asg.arn
-  }
-}
-
-data "terraform_remote_state" "db" {
-  backend = "s3"
-
-  config = {
-    bucket = var.db_remote_state_bucket
-    key    = var.db_remote_state_key
-    region = "us-east-2"
   }
 }
 
